@@ -8,11 +8,11 @@ void main() {
         backgroundColor: Colors.grey,
         appBar: AppBar(
           title: Text('Flutter App'),
-          backgroundColor: Colors.blueGrey[900],
+          backgroundColor: Colors.teal[900],
         ),
         body: Center(
           child: Image(
-            image: AssetImage('images/house.jpg'),
+            image: AssetImage('images/diamond.png'),
           ),
         )
       ),
