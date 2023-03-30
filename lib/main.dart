@@ -14,31 +14,23 @@ void main() {
       home: Scaffold  (
           backgroundColor: Colors.teal,
           body: SafeArea(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: Column(
               children: [
-                Container(
-                height: 100.0,
-                width: 100.0,
-                color: Colors.white,
-                child: Text('Container 1'),
-              ),
-                SizedBox(height: 20.0, width: 20.0),
-                Container(
-                  height: 100.0,
-                  width: 100.0,
-                  color: Colors.amber,
-                  child: Text('Container 2'),
+                CircleAvatar(
+                  radius: 50.0,
+                  backgroundImage: AssetImage('images/dp.jpg'),
                 ),
-                Container(
-                  height: 100.0,
-                  width: 100.0,
-                  color: Colors.deepPurple,
-                  child: Text('Container 3'),
+                Text(
+                    'Dinethri Gunawardhana',
+                style: TextStyle(
+                  fontSize: 30.0,
+                  fontFamily: 'Pacifico',
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold
                 ),
-
-
+                ),
               ],
+
             ),
 
           ),
