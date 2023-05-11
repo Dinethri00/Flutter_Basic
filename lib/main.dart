@@ -12,7 +12,7 @@ void main() {
       return MaterialApp(
       debugShowCheckedModeBanner:false,
       home: Scaffold  (
-          backgroundColor: Colors.teal,
+          backgroundColor: Colors.black,
           body: SafeArea(
             child: Column(
               children: [
