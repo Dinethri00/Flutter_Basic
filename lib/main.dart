@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter DateTimePicker Demo',
       home: MyHomePage(),
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
@@ -58,9 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
     _controller2 = TextEditingController(text: DateTime.now().toString());
     _controller3 = TextEditingController(text: DateTime.now().toString());
 
-    String lsHour = TimeOfDay.now().hour.toString().padLeft(2, '0');
-    String lsMinute = TimeOfDay.now().minute.toString().padLeft(2, '0');
-    _controller4 = TextEditingController(text: '$lsHour:$lsMinute');
+    // String lsHour = TimeOfDay.now().hour.toString().padLeft(2, '0');
+    // String lsMinute = TimeOfDay.now().minute.toString().padLeft(2, '0');
+    // _controller4 = TextEditingController(text: '$lsHour:$lsMinute');
 
     _getValue();
   }
