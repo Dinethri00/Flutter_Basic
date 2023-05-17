@@ -1,137 +1,101 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'date_pickers_widgets/day_picker_page.dart';
-import 'date_pickers_widgets/days_picker_page.dart';
-import 'date_pickers_widgets/month_picker_page.dart';
-import 'date_pickers_widgets/months_picker_page.dart';
-import 'date_pickers_widgets/range_picker_page.dart';
-import 'date_pickers_widgets/week_picker_page.dart';
-import 'date_pickers_widgets/year_picker_page.dart';
-import 'date_pickers_widgets/years_picker_page.dart';
-import 'event.dart';
+/// Flutter code sample for [showDatePicker].
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(const DatePickerApp());
 
-///
-class MyApp extends StatelessWidget {
+class DatePickerApp extends StatelessWidget {
+  const DatePickerApp({super.key});
+
   @override
-  // ignore: prefer_expression_function_bodies
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      supportedLocales: [
-        const Locale('en', 'US'), // American English
-        const Locale('ru', 'RU'), // Russian
-        const Locale("pt"), // Portuguese
-        const Locale('ar'), // Arabic
-      ],
-      debugShowCheckedModeBanner: false,
-      title: 'Date pickers demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
-      home: MyHomePage(
-        title: 'flutter_date_pickers Demo',
-      ),
+      theme: ThemeData(useMaterial3: true),
+      restorationScopeId: 'app',
+      home: const DatePickerExample(restorationId: 'main'),
     );
   }
 }
 
-/// Start page.
-class MyHomePage extends StatefulWidget {
-  /// Page title.
-  final String title;
+class DatePickerExample extends StatefulWidget {
+  const DatePickerExample({super.key, this.restorationId});
 
-  ///
-  MyHomePage({
-    required this.title,
-    Key? key,
-  }) : super(key: key);
+  final String? restorationId;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<DatePickerExample> createState() => _DatePickerExampleState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  DateTime startOfPeriod = DateTime.now().subtract(Duration(days: 10));
-  DateTime endOfPeriod = DateTime.now().add(Duration(days: 10));
-  int _selectedTab = 0;
+/// RestorationProperty objects can be used because of RestorationMixin.
+class _DatePickerExampleState extends State<DatePickerExample>
+    with RestorationMixin {
+  // In this example, the restoration ID for the mixin is passed in through
+  // the [StatefulWidget]'s constructor.
+  @override
+  String? get restorationId => widget.restorationId;
 
-  final List<Widget> datePickers = <Widget>[
-    DayPickerPage(
-      events: events,
-    ),
-    DaysPickerPage(),
-    WeekPickerPage(
-      events: events,
-    ),
-    RangePickerPage(
-      events: events,
-    ),
-    MonthPickerPage(),
-    MonthsPickerPage(),
-    YearPickerPage(),
-    YearsPickerPage()
-  ];
+  final RestorableDateTime _selectedDate =
+  RestorableDateTime(DateTime(2021, 7, 25));
+  late final RestorableRouteFuture<DateTime?> _restorableDatePickerRouteFuture =
+  RestorableRouteFuture<DateTime?>(
+    onComplete: _selectDate,
+    onPresent: (NavigatorState navigator, Object? arguments) {
+      return navigator.restorablePush(
+        _datePickerRoute,
+        arguments: _selectedDate.value.millisecondsSinceEpoch,
+      );
+    },
+  );
+
+  @pragma('vm:entry-point')
+  static Route<DateTime> _datePickerRoute(
+      BuildContext context,
+      Object? arguments,
+      ) {
+    return DialogRoute<DateTime>(
+      context: context,
+      builder: (BuildContext context) {
+        return DatePickerDialog(
+          restorationId: 'date_picker_dialog',
+          initialEntryMode: DatePickerEntryMode.calendarOnly,
+          initialDate: DateTime.fromMillisecondsSinceEpoch(arguments! as int),
+          firstDate: DateTime(2021),
+          lastDate: DateTime(2022),
+        );
+      },
+    );
+  }
 
   @override
-  // ignore: prefer_expression_function_bodies
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_selectedDate, 'selected_date');
+    registerForRestoration(
+        _restorableDatePickerRouteFuture, 'date_picker_route_future');
+  }
+
+  void _selectDate(DateTime? newSelectedDate) {
+    if (newSelectedDate != null) {
+      setState(() {
+        _selectedDate.value = newSelectedDate;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              'Selected: ${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}'),
+        ));
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: TextStyle(letterSpacing: 1.15),
-        ),
-      ),
-      body: datePickers[_selectedTab],
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-            canvasColor: Colors.blueGrey,
-            textTheme: Theme.of(context).textTheme.copyWith(
-                caption: TextStyle(color: Colors.white.withOpacity(0.5)))),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.date_range), label: "Day"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.date_range), label: "Days"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.date_range), label: "Week"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.date_range), label: "Range"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.date_range), label: "Month"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.date_range), label: "Months"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.date_range), label: "Year"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.date_range), label: "Years"),
-          ],
-          fixedColor: Colors.yellow,
-          currentIndex: _selectedTab,
-          onTap: (newIndex) {
-            setState(() {
-              _selectedTab = newIndex;
-            });
+      body: Center(
+        child: OutlinedButton(
+          onPressed: () {
+            _restorableDatePickerRouteFuture.present();
           },
+          child: const Text('Open Date Picker'),
         ),
       ),
     );
   }
 }
-
-/// Mock events.
-final List<Event> events = [
-  Event(DateTime.now(), "Today event"),
-  Event(DateTime.now().subtract(Duration(days: 3)), "Ev1"),
-  Event(DateTime.now().subtract(Duration(days: 13)), "Ev2"),
-  Event(DateTime.now().subtract(Duration(days: 30)), "Ev3"),
-  Event(DateTime.now().add(Duration(days: 3)), "Ev4"),
-  Event(DateTime.now().add(Duration(days: 13)), "Ev5"),
-  Event(DateTime.now().add(Duration(days: 30)), "Ev6"),
-];
