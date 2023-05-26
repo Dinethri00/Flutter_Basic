@@ -16,36 +16,36 @@ class DatePickerApp extends StatelessWidget {
     );
   }
 }
-
-class DatePickerExample extends StatefulWidget {
-  const DatePickerExample({super.key, this.restorationId});
-
-  final String? restorationId;
-
-  @override
-  State<DatePickerExample> createState() => _DatePickerExampleState();
-}
-
-/// RestorationProperty objects can be used because of RestorationMixin.
-class _DatePickerExampleState extends State<DatePickerExample>
-    with RestorationMixin {
-  // In this example, the restoration ID for the mixin is passed in through
-  // the [StatefulWidget]'s constructor.
-  @override
-  String? get restorationId => widget.restorationId;
-
-  final RestorableDateTime _selectedDate =
-  RestorableDateTime(DateTime(2021, 7, 25));
-  late final RestorableRouteFuture<DateTime?> _restorableDatePickerRouteFuture =
-  RestorableRouteFuture<DateTime?>(
-    onComplete: _selectDate,
-    onPresent: (NavigatorState navigator, Object? arguments) {
-      return navigator.restorablePush(
-        _datePickerRoute,
-        arguments: _selectedDate.value.millisecondsSinceEpoch,
-      );
-    },
-  );
+//
+// class DatePickerExample extends StatefulWidget {
+//   const DatePickerExample({super.key, this.restorationId});
+//
+//   final String? restorationId;
+//
+//   @override
+//   State<DatePickerExample> createState() => _DatePickerExampleState();
+// }
+//
+// /// RestorationProperty objects can be used because of RestorationMixin.
+// class _DatePickerExampleState extends State<DatePickerExample>
+//     with RestorationMixin {
+//   // In this example, the restoration ID for the mixin is passed in through
+//   // the [StatefulWidget]'s constructor.
+//   @override
+//   String? get restorationId => widget.restorationId;
+//
+//   final RestorableDateTime _selectedDate =
+//   RestorableDateTime(DateTime(2021, 7, 25));
+//   late final RestorableRouteFuture<DateTime?> _restorableDatePickerRouteFuture =
+//   RestorableRouteFuture<DateTime?>(
+//     onComplete: _selectDate,
+//     onPresent: (NavigatorState navigator, Object? arguments) {
+//       return navigator.restorablePush(
+//         _datePickerRoute,
+//         arguments: _selectedDate.value.millisecondsSinceEpoch,
+//       );
+//     },
+//   );
 
   @pragma('vm:entry-point')
   static Route<DateTime> _datePickerRoute(
