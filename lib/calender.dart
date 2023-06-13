@@ -47,11 +47,11 @@ class DatePickerApp extends StatelessWidget {
 //     },
 //   );
 
-  @pragma('vm:entry-point')
-  static Route<DateTime> _datePickerRoute(
-      BuildContext context,
-      Object? arguments,
-      ) {
+  // @pragma('vm:entry-point')
+  // static Route<DateTime> _datePickerRoute(
+  //     BuildContext context,
+  //     Object? arguments,
+  //     ) {
     return DialogRoute<DateTime>(
       context: context,
       builder: (BuildContext context) {
