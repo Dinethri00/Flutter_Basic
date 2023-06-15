@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 
 class Leave extends StatelessWidget {
-  const Leave({Key key}) : super(key: key);
+  const Leave({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +17,8 @@ class Leave extends StatelessWidget {
         leading: IconButton(
           icon: Image.asset("images/back.png"),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => const HomePage()));
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (context) => const HomePage()));
           },
         ),
         elevation: 0.0,
